@@ -1,7 +1,7 @@
 import { View, Text, StyleSheet, TextInput, Alert } from "react-native";
 import React, { useState } from "react";
-import InputBox from "../../components/InputBox";
-import SubmitButton from "../../components/SubmitButton";
+import InputBox from "../../components/Forms/InputBox";
+import SubmitButton from "../../components/Forms/SubmitButton";
 import axios from "axios";
 const Register = ({ navigation }) => {
   //States
@@ -19,12 +19,14 @@ const Register = ({ navigation }) => {
         return;
       }
       setLoading(false);
-      const { data } = await axios.post(
-        "http://192.168.100.242:8084/api/v1/auth/register",
-        { name, email, password }
-      );
+      const { data } = await axios.post("/auth/register", {
+        name,
+        email,
+        password,
+      });
       console.log(JSON.stringify(data, null, 2), "data");
       alert(data && data.message);
+      navigation.navigate("Login");
     } catch (error) {
       setLoading(false);
       console.log(error);
@@ -32,36 +34,41 @@ const Register = ({ navigation }) => {
   };
   return (
     <View style={styles.container}>
-      <Text style={styles.pageTitle}>Register</Text>
-      <View>
-        <InputBox inputTitle={"Name"} value={name} setValue={setName} />
-        <InputBox
-          inputTitle={"Email"}
-          // keyboardType={"email-address"}
-          // autoComplete="email"
-          value={email}
-          setValue={setEmail}
+      <View style={styles.card}>
+        <Text style={styles.pageTitle}>Register</Text>
+        <View>
+          <InputBox inputTitle={"Name"} value={name} setValue={setName} />
+          <InputBox
+            inputTitle={"Email"}
+            // keyboardType={"email-address"}
+            // autoComplete="email"
+            value={email}
+            setValue={setEmail}
+          />
+          <InputBox
+            inputTitle={"Password"}
+            secureTextEntry={true}
+            // autoComplete="password"
+            value={password}
+            setValue={setPassword}
+          />
+        </View>
+        <SubmitButton
+          title="Register"
+          loading={loading}
+          handleSubmit={handleSubmit}
         />
-        <InputBox
-          inputTitle={"Password"}
-          secureTextEntry={true}
-          // autoComplete="password"
-          value={password}
-          setValue={setPassword}
-        />
-      </View>
-      <SubmitButton
-        title="Register"
-        loading={loading}
-        handleSubmit={handleSubmit}
-      />
-      {/*  &nbsp; ==>it will give some wide space */}
-      <Text style={styles.linkText}>
-        Already have an account? &nbsp;
-        <Text style={styles.link} onPress={() => navigation.navigate("Login")}>
-          Login
+        {/*  &nbsp; ==>it will give some wide space */}
+        <Text style={styles.linkText}>
+          Already have an account? &nbsp;
+          <Text
+            style={styles.link}
+            onPress={() => navigation.navigate("Login")}
+          >
+            Login
+          </Text>
         </Text>
-      </Text>
+      </View>
     </View>
   );
 };
@@ -69,13 +76,19 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "center",
-    backgroundColor: "#e1d5c9",
+    backgroundColor: "whitesmoke",
   },
   pageTitle: {
     fontSize: 30,
+    color: "white",
     fontWeight: "bold",
     textAlign: "center",
-    color: "#1e2225",
+  },
+  card: {
+    backgroundColor: "purple",
+    padding: 25,
+    margin: 15,
+    borderRadius: 20,
   },
   inputBox: {
     height: 40,
@@ -86,6 +99,7 @@ const styles = StyleSheet.create({
   },
   linkText: {
     textAlign: "center",
+    color: "white",
   },
   link: {
     color: "crimson",

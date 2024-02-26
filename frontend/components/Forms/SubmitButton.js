@@ -10,7 +10,7 @@ const SubmitButton = ({ title, handleSubmit, loading }) => {
 };
 const styles = StyleSheet.create({
   submitBtn: {
-    backgroundColor: "black",
+    backgroundColor: "whitesmoke",
     height: 50,
     marginHorizontal: 100,
     borderRadius: 10,
@@ -19,7 +19,7 @@ const styles = StyleSheet.create({
   },
   heading: {
     textAlign: "center",
-    color: "#fff",
+    color: "#000",
     fontSize: 19,
   },
 });

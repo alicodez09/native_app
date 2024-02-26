@@ -1,11 +1,13 @@
 import { View, Text, StyleSheet, TextInput, Alert } from "react-native";
-import React, { useState } from "react";
-import InputBox from "../../components/InputBox";
-import SubmitButton from "../../components/SubmitButton";
+import React, { useState, useContext } from "react";
+import InputBox from "../../components/Forms/InputBox";
+import SubmitButton from "../../components/Forms/SubmitButton";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-
+import { AuthContext } from "../../context/auth";
 const Login = ({ navigation }) => {
+  // Global State
+  const [state, setState] = useContext(AuthContext);
   //States
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -19,13 +21,12 @@ const Login = ({ navigation }) => {
         setLoading(false);
         return;
       }
-      const { data } = await axios.post(
-        "http://192.168.100.242:8084/api/v1/auth/login",
-        { email, password }
-      );
+      const { data } = await axios.post("/auth/login", { email, password });
       console.log(JSON.stringify(data, null, 2), "data");
+      setState(data);
       await AsyncStorage.setItem("@auth", JSON.stringify(data));
       setLoading(false);
+      navigation.navigate("Home");
 
       alert(data && data.message);
     } catch (error) {
@@ -34,44 +35,46 @@ const Login = ({ navigation }) => {
     }
   };
   // temp function to check local storage
-  const getLocalStorageData = async () => {
-    let data = await AsyncStorage.getItem("@auth");
-    console.log(data, "local storage data");
-  };
-  getLocalStorageData();
+  // const getLocalStorageData = async () => {
+  //   let data = await AsyncStorage.getItem("@auth");
+  //   console.log(data, "local storage data");
+  // };
+  // getLocalStorageData();
   return (
     <View style={styles.container}>
-      <Text style={styles.pageTitle}>Login</Text>
-      <View>
-        <InputBox
-          inputTitle={"Email"}
-          keyboardType={"email-address"}
-          // autoComplete="email"
-          value={email}
-          setValue={setEmail}
+      <View style={styles.card}>
+        <Text style={styles.pageTitle}>Login</Text>
+        <View>
+          <InputBox
+            inputTitle={"Email"}
+            keyboardType={"email-address"}
+            // autoComplete="email"
+            value={email}
+            setValue={setEmail}
+          />
+          <InputBox
+            inputTitle={"Password"}
+            secureTextEntry={true}
+            // autoComplete="password"
+            value={password}
+            setValue={setPassword}
+          />
+        </View>
+        <SubmitButton
+          title="Login"
+          loading={loading}
+          handleSubmit={handleSubmit}
         />
-        <InputBox
-          inputTitle={"Password"}
-          secureTextEntry={true}
-          // autoComplete="password"
-          value={password}
-          setValue={setPassword}
-        />
-      </View>
-      <SubmitButton
-        title="Login"
-        loading={loading}
-        handleSubmit={handleSubmit}
-      />
-      <Text style={styles.linkText}>
-        Don't have an account? &nbsp;
-        <Text
-          style={styles.link}
-          onPress={() => navigation.navigate("Register")}
-        >
-          Register
+        <Text style={styles.linkText}>
+          Don't have an account? &nbsp;
+          <Text
+            style={styles.link}
+            onPress={() => navigation.navigate("Register")}
+          >
+            Register
+          </Text>
         </Text>
-      </Text>
+      </View>
     </View>
   );
 };
@@ -79,13 +82,19 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "center",
-    backgroundColor: "#e1d5c9",
+    backgroundColor: "whitesmoke",
   },
   pageTitle: {
     fontSize: 30,
+    color: "white",
     fontWeight: "bold",
     textAlign: "center",
-    color: "#1e2225",
+  },
+  card: {
+    backgroundColor: "purple",
+    padding: 25,
+    margin: 15,
+    borderRadius: 20,
   },
   inputBox: {
     height: 40,
@@ -96,6 +105,7 @@ const styles = StyleSheet.create({
   },
   linkText: {
     textAlign: "center",
+    color: "white",
   },
   link: {
     color: "crimson",
