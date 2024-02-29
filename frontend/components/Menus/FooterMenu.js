@@ -1,27 +1,47 @@
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import React from "react";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
+import { useNavigation, useRoute } from "@react-navigation/native";
 const FooterMenu = () => {
+  const navigation = useNavigation();
+  const route = useRoute();
   return (
     <View style={styles.container}>
-      <TouchableOpacity>
-        <FontAwesome5 name="home" style={styles.icons} />
-        <Text>Home</Text>
+      <TouchableOpacity onPress={() => navigation.navigate("Home")}>
+        <FontAwesome5
+          name="home"
+          style={styles.icons}
+          color={route.name === "Home" && "orange"}
+        />
+        <Text style={styles.text}>Home</Text>
       </TouchableOpacity>
-      <TouchableOpacity>
-        <FontAwesome5 name="plus-square" style={styles.icons} />
+      <TouchableOpacity onPress={() => navigation.navigate("MyTodo")}>
+        <FontAwesome5
+          name="list"
+          style={styles.icons}
+          color={route.name === "MyTodo" && "orange"}
+        />
 
-        <Text>Add Todo</Text>
+        <Text style={styles.text}>My Todo</Text>
       </TouchableOpacity>
-      <TouchableOpacity>
-        <FontAwesome5 name="info-circle" style={styles.icons} />
+      <TouchableOpacity onPress={() => navigation.navigate("Todo")}>
+        <FontAwesome5
+          name="plus-square"
+          style={styles.icons}
+          color={route.name === "Todo" && "orange"}
+        />
 
-        <Text>About</Text>
+        <Text style={styles.text}>Todo</Text>
       </TouchableOpacity>
-      <TouchableOpacity>
-        <FontAwesome5 name="user-circle" style={styles.icons} />
 
-        <Text>Account</Text>
+      <TouchableOpacity onPress={() => navigation.navigate("Account")}>
+        <FontAwesome5
+          name="user-circle"
+          style={styles.icons}
+          color={route.name === "Account" && "orange"}
+        />
+
+        <Text style={styles.text}>Account</Text>
       </TouchableOpacity>
     </View>
   );
@@ -37,6 +57,9 @@ const styles = StyleSheet.create({
     marginBottom: 3,
     alignSelf: "center",
     fontSize: 25,
+  },
+  text: {
+    fontSize: 15,
   },
 });
 export default FooterMenu;

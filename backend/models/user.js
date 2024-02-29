@@ -21,6 +21,7 @@ const userSchema = new mongoose.Schema(
     assign_password: {
       type: String,
     },
+
     role: {
       type: String,
       default: "user",

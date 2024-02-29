@@ -5,10 +5,10 @@ const colors = require("colors");
 const morgan = require("morgan");
 const connectDB = require("./config/db");
 const userRoute = require("./routes/user");
+const todoRoute = require("./routes/todo");
 
 // credentials
 dotenv.config();
-
 // Database Connection
 connectDB();
 const app = express();
@@ -20,6 +20,8 @@ app.use(morgan("dev"));
 
 // Routes
 app.use("/api/v1/auth", userRoute);
+app.use("/api/v1/todo", todoRoute);
+
 // Port
 const PORT = process.env.PORT || 8080;
 

@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, TextInput, Alert } from "react-native";
+import { View, Text, StyleSheet, Alert } from "react-native";
 import React, { useState, useContext } from "react";
 import InputBox from "../../components/Forms/InputBox";
 import SubmitButton from "../../components/Forms/SubmitButton";
@@ -34,12 +34,7 @@ const Login = ({ navigation }) => {
       console.log(error);
     }
   };
-  // temp function to check local storage
-  // const getLocalStorageData = async () => {
-  //   let data = await AsyncStorage.getItem("@auth");
-  //   console.log(data, "local storage data");
-  // };
-  // getLocalStorageData();
+
   return (
     <View style={styles.container}>
       <View style={styles.card}>

@@ -41,14 +41,14 @@ const Register = ({ navigation }) => {
           <InputBox
             inputTitle={"Email"}
             // keyboardType={"email-address"}
-            // autoComplete="email"
+            autoComplete="off"
             value={email}
             setValue={setEmail}
           />
           <InputBox
             inputTitle={"Password"}
             secureTextEntry={true}
-            // autoComplete="password"
+            autoComplete="off"
             value={password}
             setValue={setPassword}
           />
