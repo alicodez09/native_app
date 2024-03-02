@@ -3,7 +3,6 @@ import axios from "axios";
 
 //context
 const TodoContext = createContext();
-
 const TodoProvider = ({ children }) => {
   //state
   const [loading, setLoading] = useState(false);
@@ -14,21 +13,21 @@ const TodoProvider = ({ children }) => {
     setLoading(true);
     try {
       const { data } = await axios.get("/todo/get-all-todo");
+      setTodos([...data?.todos] || []); // Update this line
       setLoading(false);
-      setTodos(data?.todos);
     } catch (error) {
       console.log(error);
       setLoading(false);
     }
   };
 
-  // inintal  todos
+  // initial todos
   useEffect(() => {
     getAllPosts();
   }, []);
 
   return (
-    <TodoContext.Provider value={[todos, setTodos]}>
+    <TodoContext.Provider value={[todos, setTodos, getAllPosts]}>
       {children}
     </TodoContext.Provider>
   );

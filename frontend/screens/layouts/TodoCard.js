@@ -4,10 +4,13 @@ import moment from "moment";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 import axios from "axios";
 import { useNavigation } from "@react-navigation/native";
+import TodoEdit from "../../components/modals/TodoEdit";
 
 const TodoCard = ({ todos, myTodoScreen }) => {
   const [loading, setLoading] = useState(false);
   const navigation = useNavigation();
+  const [modalVisible, setModalVisible] = useState(false);
+  const [isTodo, setIsTodo] = useState({});
 
   // Delete Prompt
   const handleDeletePrompt = async (id) => {
@@ -31,7 +34,7 @@ const TodoCard = ({ todos, myTodoScreen }) => {
       const { data } = await axios.delete(`/todo/delete-user-todo/${id}`);
       setLoading(false);
       alert(data?.message);
-      navigation.navigate("Home");
+      navigation.push("MyTodo");
     } catch (error) {
       setLoading(false);
       console.log(error);
@@ -39,6 +42,15 @@ const TodoCard = ({ todos, myTodoScreen }) => {
   };
   return (
     <View>
+      {myTodoScreen ? (
+        <TodoEdit
+          modalVisible={modalVisible}
+          setModalVisible={setModalVisible}
+          isTodo={isTodo}
+        />
+      ) : (
+        <></>
+      )}
       <Text style={styles.heading}>Total Todos are {todos?.length}</Text>
       {todos?.map((todo, index) => (
         <View key={index} style={styles.card}>
@@ -46,18 +58,21 @@ const TodoCard = ({ todos, myTodoScreen }) => {
             <View style={{ flexDirection: "row", justifyContent: "flex-end" }}>
               <Text style={{ marginHorizontal: 10 }}>
                 <FontAwesome5
-                  name="trash"
-                  color={"crimson"}
+                  name="pen"
+                  color={"#191d47"}
                   size={16}
-                  onPress={() => handleDeletePrompt(todo?._id)}
+                  onPress={() => {
+                    setModalVisible(true);
+                    setIsTodo(todo);
+                  }}
                 />
               </Text>
               <Text style={{ marginHorizontal: 10 }}>
                 <FontAwesome5
-                  name="pen"
-                  color={"darkblue"}
+                  name="trash"
+                  color={"crimson"}
                   size={16}
-                  // onPress={() => handleDeletePrompt(todo?._id)}
+                  onPress={() => handleDeletePrompt(todo?._id)}
                 />
               </Text>
             </View>

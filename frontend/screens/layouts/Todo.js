@@ -83,7 +83,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   inputBox: {
-    backgroundColor: "#ffffff",
+    backgroundColor: "#dfe8e7",
     textAlignVertical: "top",
     paddingTop: 10,
     width: 300,

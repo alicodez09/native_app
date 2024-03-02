@@ -39,10 +39,10 @@ const CreateTodo = async (req, res) => {
 };
 const GetTodos = async (req, res) => {
   try {
-    // const todos = await Todo.find().populate("postedBy","_id name").sort({createAt:-1});\
+    // const todos = await Todo.find().populate("postedBy","_id name").sort({createAt:-1});
     const todos = await Todo.find()
       .populate("postedBy", "_id name email role")
-      .sort({ createAt: 1 });
+      .sort({ createdAt: -1 });
 
     res.status(200).send({
       success: true,
@@ -87,15 +87,50 @@ const DeleteUserTodos = async (req, res) => {
     console.log(error);
     res.status(500).send({
       success: false,
-      message: "Something wents wrong while deleting the user",
+      message: "Something wents wrong while deleting the todo",
       error,
     });
   }
 };
+const UpdateUserTodos = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { title, description } = req.body;
+    const todo = await Todo.findById({ _id: req.params.id });
+    if (!title || !description) {
+      return res.status(500).send({
+        success: false,
+        message: "Provide atleast one field",
+      });
+    }
+    const updatedTodo = await Todo.findByIdAndUpdate(
+      { _id: req.params.id },
+      {
+        title: title || todo?.title,
+        description: description || todo?.description,
+      },
+      { new: true }
+    );
+    res.status(200).send({
+      success: true,
+      message: "Todo updated successfully",
+      updatedTodo,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      success: false,
+      message: "Something went wrong while updating the todo",
+      error,
+    });
+  }
+};
+
 module.exports = {
   requireSignIn,
   CreateTodo,
   GetTodos,
   GetUserTodos,
   DeleteUserTodos,
+  UpdateUserTodos,
 };
