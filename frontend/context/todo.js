@@ -13,6 +13,7 @@ const TodoProvider = ({ children }) => {
     setLoading(true);
     try {
       const { data } = await axios.get("/todo/get-all-todo");
+      // console.log(data, "datatokdododatatokdododatatokdodo");
       setTodos([...data?.todos] || []); // Update this line
       setLoading(false);
     } catch (error) {

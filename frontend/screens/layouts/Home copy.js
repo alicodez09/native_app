@@ -1,41 +1,26 @@
-import React, { useCallback, useState, useEffect } from "react";
-import { View, ScrollView, RefreshControl, StyleSheet } from "react-native";
-import axios from "axios";
+import {
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  RefreshControl,
+} from "react-native";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import FooterMenu from "../../components/Menus/FooterMenu";
+import { TodoContext } from "../../context/todo";
 import TodoCard from "./TodoCard";
 
 const Home = () => {
-  const [todos, setTodos] = useState([]);
+  const [todos, getAllPosts] = useContext(TodoContext);
   const [refreshing, setRefreshing] = useState(false);
-  const [loading, setLoading] = useState(false);
 
-  // Function to fetch todos directly from the API
-  const fetchTodos = async () => {
-    setLoading(true);
-    try {
-      const { data } = await axios.get("/todo/get-all-todo");
-      setTodos(data?.todos || []); // Update state with the fetched todos
-    } catch (error) {
-      console.error("Error fetching todos:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // Fetch todos when the component mounts
-  useEffect(() => {
-    fetchTodos();
-  }, []);
-
-  // Refresh handler
   const onRefresh = useCallback(() => {
     setRefreshing(true);
-    fetchTodos();
+    getAllPosts();
     setTimeout(() => {
       setRefreshing(false);
     }, 2000);
   }, []);
-
   return (
     <View style={styles.container}>
       <ScrollView
@@ -52,7 +37,6 @@ const Home = () => {
     </View>
   );
 };
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -60,5 +44,4 @@ const styles = StyleSheet.create({
     margin: 10,
   },
 });
-
 export default Home;
